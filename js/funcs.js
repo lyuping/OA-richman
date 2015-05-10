@@ -8,9 +8,7 @@
         var _map = null;
         var _markerInfos = null;
         var _polyline = null;
-        var _infowindow = new google.maps.InfoWindow({
-            pixelOffset: new google.maps.Size(0, -35)
-        });
+        var _infowindow = null;
 
         var circlePath = function (r) {
             return 'M 0 0 m -' + r + ', 0 ' +
@@ -63,7 +61,15 @@
             mapMove(Unit.lat, Unit.lng, 0, Unit.unit);
         };
 
-        var showInfo = function (map, marker) {
+        var showInfo = function (map, marker, isUser) {
+            _infowindow && _infowindow.close();
+            if (isUser) {
+                _infowindow = new google.maps.InfoWindow({
+                    pixelOffset: new google.maps.Size(0, -35)
+                });
+            } else {
+                _infowindow = new google.maps.InfoWindow();
+            }
             var template = '<div>{title}</div>'.replace('{title}', marker.title);
             _infowindow.setContent(template);
             _infowindow.open(map, marker);
@@ -108,7 +114,7 @@
                 });
 
                 google.maps.event.addListener(t.marker, 'click', function (e) {
-                    showInfo(_map, this);
+                    showInfo(_map, this, false);
                 });
 
                 return t;
@@ -175,7 +181,7 @@
             this.marker.setPosition(position);
             _markerInfos[this.index].userCount += 1;
 
-            showInfo(_markerInfos[this.index].marker.map, _markerInfos[this.index].marker);
+            showInfo(_markerInfos[this.index].marker.map, _markerInfos[this.index].marker, true);
 
             return this;
         };
