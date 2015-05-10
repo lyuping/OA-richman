@@ -8,6 +8,9 @@
         var _map = null;
         var _markerInfos = null;
         var _polyline = null;
+        var _infowindow = new google.maps.InfoWindow({
+            pixelOffset: new google.maps.Size(0, -35)
+        });
 
         var circlePath = function (r) {
             return 'M 0 0 m -' + r + ', 0 ' +
@@ -60,6 +63,11 @@
             mapMove(Unit.lat, Unit.lng, 0, Unit.unit);
         };
 
+        var showInfo = function (map, marker) {
+            var template = '<div>{title}</div>'.replace('{title}', marker.title);
+            _infowindow.setContent(template);
+            _infowindow.open(map, marker);
+        }
 
         this.initMap = function ($map, option) {
             option = $.extend({
@@ -77,6 +85,7 @@
             return this;
         };
 
+
         this.initMarkerInfos = function (markerInfos) {
 
             _markerInfos = markerInfos.map(function (t) {
@@ -84,19 +93,22 @@
                 t.getPosition = function () { return this.position; };
                 t.setPosition = function (p) { if (this.marker) this.marker.setPosition(p); return this; };
 
-                //yu: add location name for tooltip
                 t.marker = new google.maps.Marker({
                     map: _map,
                     draggable: false,
                     position: t.position,
                     title: t.name ? t.name : '',
                     icon: {
-                        path: circlePath(15),
+                        path: circlePath(12),
                         strokeColor: 'rgba(50, 60, 140, 1)',
                         strokeWeight: 1,
                         fillColor: 'rgba(68, 77, 145, .85)',
                         fillOpacity: 0.5
                     }
+                });
+
+                google.maps.event.addListener(t.marker, 'click', function (e) {
+                    showInfo(_map, this);
                 });
 
                 return t;
@@ -123,6 +135,7 @@
                 return _map && _markerInfos && _polyline ? true : false;
             } catch (err) { return false; }
         };
+
 
         this.setUserPosition = function (position) {
 
@@ -161,6 +174,8 @@
 
             this.marker.setPosition(position);
             _markerInfos[this.index].userCount += 1;
+
+            showInfo(_markerInfos[this.index].marker.map, _markerInfos[this.index].marker);
 
             return this;
         };
