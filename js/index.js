@@ -39,8 +39,11 @@ $(function () {
 
         ];
 
+        //set your custom position here
         var spot = [
             [25.0518795, 121.5423308, '起點'],
+            [25.0527073, 121.5448665, '慶城街1號地下室'],
+            [25.0528105, 121.545639, '慶城海南雞飯'],
             [25.0508605, 121.5447991, '妞呀小廚(星馬泰料理)'],
             [25.0486081, 121.5425775, '太師傅便當專賣店'],
             [25.048875, 121.542208, '名峰烤肉飯'],
@@ -48,11 +51,12 @@ $(function () {
             [25.053732, 121.540414, '周胖子'],
             [25.055046, 121.539874, '山東刀削麵'],
             [25.0560209, 121.5417548, '福生園(韓式鐵板)'],
-        ]
+            [25.053192, 121.5429326, '成都抄手麵食']
+        ];
 
         var markerInfos = [];
-        var setMapMark = function () {
-            //todo: sort
+        var setMarkerInfos = function () {
+            //todo: sort spot
             for (var i = 0, data; data = spot[i]; i++) {
                 markerInfos.push({ position: new google.maps.LatLng(data[0], data[1]), name: data[2] });
             }
@@ -60,7 +64,6 @@ $(function () {
 
         var map = new window.funcs();
 
-        //yu: passing init start path from here
         if (!map.init(markerInfos, $('#map'), { center: new google.maps.LatLng(spot[0][0], spot[0][1]) })) {
             return alert('地圖資料初始化失敗');
         }
