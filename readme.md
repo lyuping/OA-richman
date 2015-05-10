@@ -1,5 +1,5 @@
 基於 [OA-richman](https://github.com/comdan66/OA-richman/) 修改的午餐擲杯網站  
-下載後打開js/index.js 修改 var spot 內的資料即可使用  
+下載後打開 js/index.js 修改 var spot 內的資料即可使用  
 範例頁面: [http://lyuping.github.io/OA-richman/](http://lyuping.github.io/OA-richman/)  
 
 ---
